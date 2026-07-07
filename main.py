@@ -29,19 +29,28 @@ from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
+
 from config import (
     PARTICIPANTES_DIR_NAMES,
     IMAGE_EXTENSIONS,
     DATE_PATTERNS,
     SESSION_GROUP_GAP_SECONDS,
+    RESULTADOS_DIR_NAME,
+    ASSETS_DIR_NAME,
+    SHARED_IMAGES_SUBDIR,
+    PROJECT_PROGRESS,
+    PROJECT_OVERALL_PROGRESS,
+    PROJECT_PROGRESS_NOTES,
+    PROJECT_VERSION,
+    PROJECT_NEXT_OBJECTIVE,
 )
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR
 IMAGES_DIR = BASE_DIR
-INFORMES_DIR = SCRIPT_DIR / "informes"
-SHARED_IMAGES_DIR = SCRIPT_DIR / "00_Imagenes"
-
+INFORMES_DIR = SCRIPT_DIR / RESULTADOS_DIR_NAME
+SHARED_IMAGES_DIR = SCRIPT_DIR / ASSETS_DIR_NAME / SHARED_IMAGES_SUBDIR
 
 def _resolver_ruta(path_obj):
     path_obj = Path(path_obj).expanduser()
@@ -50,22 +59,25 @@ def _resolver_ruta(path_obj):
     except Exception:
         return path_obj.absolute()
 
+
 def resolver_directorio_participantes(root_dir):
     root_dir = _resolver_ruta(root_dir)
 
     datos_dir = _resolver_ruta(root_dir / "Datos")
-
     if datos_dir.exists() and datos_dir.is_dir():
         return datos_dir
 
     return root_dir
 
+
+
+
 def listar_carpetas_participantes(root_dir):
     root_dir = Path(root_dir)
     participantes = []
     excluidas = {
-        "00_imagenes", "00 imagenes", "00-imagenes", "informes", "imagenes", "imágenes",
-        "excel_acumulado", "__pycache__", ".git", ".venv", "venv", "env",
+        "00_imagenes", "00 imagenes", "00-imagenes", "informes", "resultados", "imagenes", "imágenes",
+        "assets", "excel_acumulado", "__pycache__", ".git", ".venv", "venv", "env",
     }
 
     try:
@@ -113,29 +125,36 @@ def seleccionar_carpetas_participantes(root_dir):
         print("\nNo se han encontrado participantes.")
         print("\nCopia las carpetas de los participantes dentro de:")
         print(f"\n   {directorio_participantes}")
-
         print("\nEjemplo:")
         print("Datos/")
         print("   Juan/")
         print("   María/")
         print("   Pedro/")
-
         input("\nPulsa ENTER para salir...")
         raise SystemExit
 
     if directorio_participantes != root_dir:
         print(f"Carpeta de datos detectada automáticamente: {directorio_participantes}")
 
-    print("\nSujetos detectados en la carpeta de datos:")
-    for i, carpeta in enumerate(participantes, start=1):
-        print(f"{i}. {nombre_sujeto_desde_carpeta(carpeta)}  [{carpeta.name}]")
+    print("\n" + "=" * 50)
+    print(" PARTICIPANTES DETECTADOS")
+    print("=" * 50)
+    print(f"\nParticipantes encontrados: {len(participantes)}\n")
 
-    print("\nSelecciona uno o varios sujetos por número separados por comas")
-    print("0 = todos")
-    print("Ejemplos: 1   |   1,3,5   |   0")
+    for i, carpeta in enumerate(participantes, start=1):
+        print(f"{i:>3}. {nombre_sujeto_desde_carpeta(carpeta)}")
+
+    print("\n" + "-" * 50)
+    print("  0. Todos los participantes")
+    print("-" * 50)
+    print("\nPuedes seleccionar:")
+    print(" • Un participante      -> 1")
+    print(" • Varios               -> 1,3,5")
+    print(" • Intervalo            -> 5-12")
+    print(" • Todos                -> 0")
 
     while True:
-        entrada = input("Selección de sujetos [Enter = 1]: ").strip().lower()
+        entrada = input("\nSelección: ").strip().lower()
 
         if entrada == "":
             return [participantes[0]]
@@ -143,10 +162,21 @@ def seleccionar_carpetas_participantes(root_dir):
         if entrada in {"0", "todos", "todas", "all", "*"}:
             return participantes
 
+        if re.fullmatch(r"\d+\s*-\s*\d+", entrada):
+            inicio_txt, fin_txt = re.split(r"\s*-\s*", entrada)
+            inicio = int(inicio_txt)
+            fin = int(fin_txt)
+
+            if 1 <= inicio <= fin <= len(participantes):
+                return participantes[inicio - 1:fin]
+
+            print("Intervalo no válido. Ejemplo: 5-12")
+            continue
+
         partes = [x.strip() for x in re.split(r"[,\s;]+", entrada) if x.strip()]
 
         if not partes:
-            print("Entrada no válida. Introduce números separados por comas o 0 para todos.")
+            print("Entrada no válida.")
             continue
 
         indices = []
@@ -167,24 +197,21 @@ def seleccionar_carpetas_participantes(root_dir):
                 indices.append(idx)
 
         if not valido:
-            print("Entrada no válida. Introduce números separados por comas o 0 para todos.")
+            print("Entrada no válida.")
             continue
 
         return [participantes[i - 1] for i in indices]
 
-        
+
 def configurar_directorios_base(participant_dir):
     global BASE_DIR, IMAGES_DIR, INFORMES_DIR
 
     BASE_DIR = _resolver_ruta(participant_dir)
     IMAGES_DIR = BASE_DIR
-    INFORMES_DIR = SCRIPT_DIR / "informes" / safe_simple_folder_name(nombre_sujeto_desde_carpeta(BASE_DIR))
+    INFORMES_DIR = SCRIPT_DIR / RESULTADOS_DIR_NAME / safe_simple_folder_name(nombre_sujeto_desde_carpeta(BASE_DIR))
     INFORMES_DIR.mkdir(parents=True, exist_ok=True)
 
     return BASE_DIR
-
-
-SESSION_GROUP_GAP_SECONDS = 90
 
 
 # ============================================================
@@ -2110,13 +2137,13 @@ def append_execution_summary_excel(row, output_path):
 
 
 def get_global_summary_excel_path():
-    out_dir = SCRIPT_DIR / "Seguimiento_global"
+    out_dir = SCRIPT_DIR / RESULTADOS_DIR_NAME / "Seguimiento_global"
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir / "todos_los_participantes_acumulado.xlsx"
 
 
 def get_global_tracking_dir():
-    out_dir = SCRIPT_DIR / "Seguimiento_global"
+    out_dir = SCRIPT_DIR / RESULTADOS_DIR_NAME / "Seguimiento_global"
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir
 
@@ -2324,7 +2351,7 @@ DEFAULT_ALARM_FREQ_DAYS = 7
 
 
 def get_alarmas_excel_path():
-    out_dir = SCRIPT_DIR / "Seguimiento_global"
+    out_dir = SCRIPT_DIR / RESULTADOS_DIR_NAME / "Seguimiento_global"
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir / "alarmas_informes.xlsx"
 
@@ -3891,7 +3918,7 @@ def ejecutar_informe(tipo_informe_clave, tipo_informe_label, default_name=None, 
     tesseract_path = set_tesseract()
     print(f"Tesseract: {tesseract_path}")
     print(f"Carpeta del sujeto donde se buscarán imágenes: {images_dir}")
-    print(f"Carpeta base de informes: {INFORMES_DIR}")
+    print(f"Carpeta base de resultados: {INFORMES_DIR}")
     print(f"Carpeta del informe actual: {report_dir}")
     print(f"Excel acumulativo del sujeto: {output_xlsx}")
     print(f"Modo de definición seleccionado: {get_definition_label(definition_mode)}")
@@ -4114,7 +4141,7 @@ def ejecutar_informe(tipo_informe_clave, tipo_informe_label, default_name=None, 
     return True
 
 
-def main():
+def ejecutar_analisis():
     print("====================================")
     print("KUBIOS TODO-EN-UNO ESTABLE v41")
     print("====================================")
@@ -4167,7 +4194,7 @@ def main():
         print(f"\n[{idx}/{total}] Carpeta de sujeto seleccionada: {BASE_DIR}")
         print(f"Sujeto detectado automáticamente: {nombre_auto.replace('_', ' ')}")
         print(f"Carpeta del sujeto para buscar imágenes: {IMAGES_DIR}")
-        print(f"Carpeta donde se guardarán sus informes: {INFORMES_DIR}")
+        print(f"Carpeta donde se guardarán sus resultados: {INFORMES_DIR}")
 
         if tipo_informe_clave == "ambos":
             print("\nINICIANDO OPCIÓN 3: AMBOS INFORMES")
@@ -4245,6 +4272,157 @@ def main():
     if total_xlsx and total_docx:
         print(f"Excel de resultados totales: {total_xlsx}")
         print(f"Word de resultados totales: {total_docx}")
+
+
+def _progress_bar(porcentaje, ancho=20):
+    try:
+        porcentaje = int(porcentaje)
+    except Exception:
+        porcentaje = 0
+    porcentaje = max(0, min(100, porcentaje))
+    relleno = int(round((porcentaje / 100) * ancho))
+    return "█" * relleno + "░" * (ancho - relleno)
+
+
+def _count_files_by_suffix(root_dir, suffixes):
+    root_dir = Path(root_dir)
+    if not root_dir.exists():
+        return 0
+    suffixes = {s.lower() for s in suffixes}
+    return sum(1 for p in root_dir.rglob("*") if p.is_file() and p.suffix.lower() in suffixes)
+
+
+def _status_text(path):
+    path = Path(path)
+    return "OK" if path.exists() else "NO ENCONTRADO"
+
+
+def _count_subjects():
+    datos_dir = SCRIPT_DIR / "Datos"
+    if not datos_dir.exists() or not datos_dir.is_dir():
+        return 0
+    return len(listar_carpetas_participantes(datos_dir))
+
+
+def _count_input_images():
+    datos_dir = SCRIPT_DIR / "Datos"
+    suffixes = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tif", ".tiff"}
+    return _count_files_by_suffix(datos_dir, suffixes)
+
+
+def _count_processed_records_from_excels():
+    resultados_dir = SCRIPT_DIR / RESULTADOS_DIR_NAME
+    if not resultados_dir.exists():
+        return 0
+
+    total = 0
+    for xlsx in resultados_dir.rglob("*_kubios_acumulado.xlsx"):
+        try:
+            df = pd.read_excel(xlsx, sheet_name="datos_kubios")
+            total += len(df)
+        except Exception:
+            continue
+    return total
+
+
+def mostrar_dashboard_proyecto():
+    resultados_dir = SCRIPT_DIR / RESULTADOS_DIR_NAME
+    datos_dir = SCRIPT_DIR / "Datos"
+    legacy_dir = SCRIPT_DIR / "legacy"
+    assets_dir = SCRIPT_DIR / ASSETS_DIR_NAME
+
+    sujetos = _count_subjects()
+    imagenes_entrada = _count_input_images()
+    registros_excel = _count_processed_records_from_excels()
+
+    excels_generados = _count_files_by_suffix(resultados_dir, {".xlsx", ".xls"})
+    words_generados = _count_files_by_suffix(resultados_dir, {".docx"})
+    graficos_generados = _count_files_by_suffix(resultados_dir, {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tif", ".tiff"})
+
+    print("\n" + "=" * 70)
+    print(" DASHBOARD DEL PROYECTO")
+    print("=" * 70)
+
+    print(f"\nVersión actual: {PROJECT_VERSION}")
+    print(f"Progreso global estimado: {PROJECT_OVERALL_PROGRESS}%  {_progress_bar(PROJECT_OVERALL_PROGRESS, 25)}")
+    print(f"Próximo objetivo: {PROJECT_NEXT_OBJECTIVE}")
+
+    print("\n" + "-" * 70)
+    print(" DATOS")
+    print("-" * 70)
+    print(f"Sujetos detectados:                 {sujetos}")
+    print(f"Imágenes de entrada detectadas:     {imagenes_entrada}")
+    print(f"Registros en Excel acumulativo:     {registros_excel}")
+    print(f"Excels generados:                   {excels_generados}")
+    print(f"Informes Word generados:            {words_generados}")
+    print(f"Gráficos generados:                 {graficos_generados}")
+
+    print("\n" + "-" * 70)
+    print(" CARPETAS Y ARCHIVOS CLAVE")
+    print("-" * 70)
+    print(f"Datos/:                              {_status_text(datos_dir)}")
+    print(f"{RESULTADOS_DIR_NAME}/:                         {_status_text(resultados_dir)}")
+    print(f"assets/:                             {_status_text(assets_dir)}")
+    print(f"legacy/:                             {_status_text(legacy_dir)}")
+    print(f"main.py:                             {_status_text(SCRIPT_DIR / 'main.py')}")
+    print(f"config.py:                           {_status_text(SCRIPT_DIR / 'config.py')}")
+    print(f"legacy/V41_kubios.py:                {_status_text(legacy_dir / 'V41_kubios.py')}")
+
+    print("\n" + "-" * 70)
+    print(" DESARROLLO")
+    print("-" * 70)
+    for area, porcentaje in PROJECT_PROGRESS.items():
+        print(f"{area:<38} {porcentaje:>3}%  {_progress_bar(porcentaje)}")
+
+    print("\nNota:")
+    print(PROJECT_PROGRESS_NOTES)
+    input("\nPulsa ENTER para volver al menú...")
+
+
+def mostrar_porcentaje_proyecto():
+    print("\n" + "=" * 60)
+    print(" ESTADO DEL PROYECTO")
+    print("=" * 60)
+    print(f"\nVersión actual: {PROJECT_VERSION}")
+    print(f"Progreso global estimado: {PROJECT_OVERALL_PROGRESS}%  {_progress_bar(PROJECT_OVERALL_PROGRESS)}\n")
+
+    for area, porcentaje in PROJECT_PROGRESS.items():
+        print(f"{area:<38} {porcentaje:>3}%  {_progress_bar(porcentaje)}")
+
+    print("\nNota:")
+    print(PROJECT_PROGRESS_NOTES)
+    input("\nPulsa ENTER para volver al menú...")
+
+
+def main():
+    while True:
+        print("\n" + "=" * 60)
+        print(" HRV-LONGITUDINAL-ANALYZER")
+        print("=" * 60)
+        print("1. Ejecutar análisis Kubios OCR")
+        print("2. Ver porcentaje del proyecto")
+        print("3. Dashboard del proyecto")
+        print("0. Salir")
+
+        opcion = input("\nSelecciona una opción: ").strip()
+
+        if opcion == "1":
+            ejecutar_analisis()
+            break
+
+        if opcion == "2":
+            mostrar_porcentaje_proyecto()
+            continue
+
+        if opcion == "3":
+            mostrar_dashboard_proyecto()
+            continue
+
+        if opcion == "0":
+            print("Saliendo...")
+            break
+
+        print("Opción no válida.")
 
 
 if __name__ == "__main__":
