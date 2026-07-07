@@ -29,24 +29,18 @@ from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
+from config import (
+    PARTICIPANTES_DIR_NAMES,
+    IMAGE_EXTENSIONS,
+    DATE_PATTERNS,
+    SESSION_GROUP_GAP_SECONDS,
+)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR
 IMAGES_DIR = BASE_DIR
 INFORMES_DIR = SCRIPT_DIR / "informes"
 SHARED_IMAGES_DIR = SCRIPT_DIR / "00_Imagenes"
-PARTICIPANTES_DIR_NAMES = (
-    "Datos",
-    "DATOS",
-    "datos",
-    "Dato",
-    "DATO",
-    "dato",
-    "analisis de participantes",
-    "análisis de participantes",
-    "analisis_participantes",
-    "participantes",
-)
 
 
 def _resolver_ruta(path_obj):
@@ -56,21 +50,15 @@ def _resolver_ruta(path_obj):
     except Exception:
         return path_obj.absolute()
 
-
 def resolver_directorio_participantes(root_dir):
     root_dir = _resolver_ruta(root_dir)
-    candidatos = [_resolver_ruta(root_dir / nombre) for nombre in PARTICIPANTES_DIR_NAMES]
 
-    for candidato in candidatos:
-        if candidato.exists() and candidato.is_dir():
-            participantes = listar_carpetas_participantes(candidato)
-            if participantes:
-                return candidato
+    datos_dir = _resolver_ruta(root_dir / "Datos")
+
+    if datos_dir.exists() and datos_dir.is_dir():
+        return datos_dir
 
     return root_dir
-
-
-
 
 def listar_carpetas_participantes(root_dir):
     root_dir = Path(root_dir)
@@ -122,9 +110,18 @@ def seleccionar_carpetas_participantes(root_dir):
     participantes = listar_carpetas_participantes(directorio_participantes)
 
     if not participantes:
-        print("No se han detectado carpetas de sujetos válidas.")
-        print(f"Se mantendrá el modo actual usando esta carpeta como BASE_DIR: {root_dir}")
-        return [root_dir]
+        print("\nNo se han encontrado participantes.")
+        print("\nCopia las carpetas de los participantes dentro de:")
+        print(f"\n   {directorio_participantes}")
+
+        print("\nEjemplo:")
+        print("Datos/")
+        print("   Juan/")
+        print("   María/")
+        print("   Pedro/")
+
+        input("\nPulsa ENTER para salir...")
+        raise SystemExit
 
     if directorio_participantes != root_dir:
         print(f"Carpeta de datos detectada automáticamente: {directorio_participantes}")
@@ -139,26 +136,33 @@ def seleccionar_carpetas_participantes(root_dir):
 
     while True:
         entrada = input("Selección de sujetos [Enter = 1]: ").strip().lower()
+
         if entrada == "":
             return [participantes[0]]
+
         if entrada in {"0", "todos", "todas", "all", "*"}:
             return participantes
 
         partes = [x.strip() for x in re.split(r"[,\s;]+", entrada) if x.strip()]
+
         if not partes:
             print("Entrada no válida. Introduce números separados por comas o 0 para todos.")
             continue
 
         indices = []
         valido = True
+
         for parte in partes:
             if not re.fullmatch(r"\d+", parte):
                 valido = False
                 break
+
             idx = int(parte)
+
             if not (1 <= idx <= len(participantes)):
                 valido = False
                 break
+
             if idx not in indices:
                 indices.append(idx)
 
@@ -168,6 +172,7 @@ def seleccionar_carpetas_participantes(root_dir):
 
         return [participantes[i - 1] for i in indices]
 
+        
 def configurar_directorios_base(participant_dir):
     global BASE_DIR, IMAGES_DIR, INFORMES_DIR
 
@@ -178,14 +183,6 @@ def configurar_directorios_base(participant_dir):
 
     return BASE_DIR
 
-IMAGE_EXTENSIONS = ("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.webp")
-DATE_PATTERNS = [
-    re.compile(r"(?P<date>\d{4}-\d{2}-\d{2})\s+at\s+(?P<time>\d{2}\.\d{2}\.\d{2})", re.IGNORECASE),
-    re.compile(r"(?P<date>\d{4}-\d{2}-\d{2})[ _-]+(?P<time>\d{2}[\.:\-]\d{2}[\.:\-]\d{2})", re.IGNORECASE),
-    re.compile(r"(?P<date>\d{2}[\-\.]\d{2}[\-\.]\d{4})[ _-]+(?P<time>\d{2}[\.:\-]\d{2}[\.:\-]\d{2})", re.IGNORECASE),
-    re.compile(r"(?P<date>\d{4}-\d{2}-\d{2})", re.IGNORECASE),
-    re.compile(r"(?P<date>\d{2}[\-\.]\d{2}[\-\.]\d{4})", re.IGNORECASE),
-]
 
 SESSION_GROUP_GAP_SECONDS = 90
 
