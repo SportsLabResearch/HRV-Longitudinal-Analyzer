@@ -50,3 +50,7 @@ data/reports/*
 # Si los datos contienen información sensible, conviene no subirlos.
 data/raw/*
 !data/raw/.gitkeep
+
+# Proyecto HRV
+Resultados/
+Datos/

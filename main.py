@@ -61,11 +61,20 @@ def _resolver_ruta(path_obj):
 
 
 def resolver_directorio_participantes(root_dir):
+    """Localiza la carpeta de datos de forma compatible Windows/macOS/Linux.
+
+    Prioridad:
+    1) Datos/
+    2) datos/
+    3) DATOS/
+    4) carpeta raíz del proyecto
+    """
     root_dir = _resolver_ruta(root_dir)
 
-    datos_dir = _resolver_ruta(root_dir / "Datos")
-    if datos_dir.exists() and datos_dir.is_dir():
-        return datos_dir
+    for nombre in ("Datos", "datos", "DATOS"):
+        datos_dir = _resolver_ruta(root_dir / nombre)
+        if datos_dir.exists() and datos_dir.is_dir():
+            return datos_dir
 
     return root_dir
 
@@ -114,6 +123,82 @@ def nombre_sujeto_desde_carpeta(carpeta):
     nombre = nombre.replace("_", " ").replace("-", " ")
     nombre = re.sub(r"\s+", " ", nombre).strip()
     return nombre or Path(carpeta).name.strip() or "Sin nombre"
+
+
+def _norm_nombre_para_match(texto):
+    texto = _strip_accents_robust(str(texto or "").lower()) if "_strip_accents_robust" in globals() else unicodedata.normalize("NFKD", str(texto or "").lower())
+    if not isinstance(texto, str):
+        texto = str(texto)
+    texto = "".join(ch for ch in unicodedata.normalize("NFKD", texto) if not unicodedata.combining(ch))
+    texto = re.sub(r"^(imagenes?|imagenes?)[_\- ]+", "", texto, flags=re.IGNORECASE).strip()
+    texto = re.sub(r"^\d+[_\- ]*", "", texto).strip()
+    texto = re.sub(r"[^a-z0-9]+", "", texto)
+    return texto
+
+
+def obtener_carpetas_imagenes_participante(participant_dir):
+    """Devuelve rutas candidatas para imágenes de un participante.
+
+    Soporta estructuras como:
+    datos/imagenes_judith/
+    datos/Judith/imagenes_judith/
+    datos/Judith/imagenes/
+    """
+    participant_dir = _resolver_ruta(participant_dir)
+    nombre_participante = nombre_sujeto_desde_carpeta(participant_dir)
+    nombre_norm = _norm_nombre_para_match(nombre_participante)
+    candidatos = []
+    vistos = set()
+
+    def add(p):
+        if p is None:
+            return
+        try:
+            rp = Path(p).expanduser().resolve()
+        except Exception:
+            rp = Path(p).expanduser().absolute()
+        key = str(rp).lower()
+        if key not in vistos:
+            vistos.add(key)
+            candidatos.append(rp)
+
+    # 1. La propia carpeta puede ser datos/imagenes_judith.
+    add(participant_dir)
+
+    # 2. Subcarpetas internas habituales.
+    for nombre in ("imagenes", "imágenes", "Imagenes", "Imágenes", "images", "Images"):
+        add(participant_dir / nombre)
+
+    for child in sorted(participant_dir.iterdir(), key=lambda p: p.name.lower()) if participant_dir.exists() and participant_dir.is_dir() else []:
+        if child.is_dir() and re.match(r"^(imagenes?|imágenes?|images)[_\- ]*", child.name, flags=re.IGNORECASE):
+            add(child)
+
+    # 3. Carpetas hermanas tipo datos/imagenes_judith cuando el participante es datos/Judith.
+    parent = participant_dir.parent
+    if parent.exists() and parent.is_dir():
+        for child in sorted(parent.iterdir(), key=lambda p: p.name.lower()):
+            if not child.is_dir():
+                continue
+            child_norm = _norm_nombre_para_match(child.name)
+            child_name_low = child.name.lower()
+            if child_name_low.startswith(("imagenes_", "imagenes-", "imagenes ", "imagen_", "imagen-", "imagen ", "imágenes_", "imágenes-", "imágenes ", "images_", "images-", "images ")):
+                if not nombre_norm or nombre_norm in child_norm or child_norm in {"imagenes" + nombre_norm, "imagen" + nombre_norm, "images" + nombre_norm}:
+                    add(child)
+
+    return candidatos
+
+
+def resolver_carpeta_imagenes_participante(participant_dir):
+    """Elige la mejor carpeta de imágenes para el participante seleccionado."""
+    candidatos = obtener_carpetas_imagenes_participante(participant_dir)
+    mejor_dir = _resolver_ruta(participant_dir)
+    mejor_files = []
+    for cand in candidatos:
+        files = get_image_files(cand, recursive=True) if "get_image_files" in globals() else []
+        if len(files) > len(mejor_files):
+            mejor_dir = cand
+            mejor_files = files
+    return mejor_dir, mejor_files, candidatos
 
 
 def seleccionar_carpetas_participantes(root_dir):
@@ -207,7 +292,8 @@ def configurar_directorios_base(participant_dir):
     global BASE_DIR, IMAGES_DIR, INFORMES_DIR
 
     BASE_DIR = _resolver_ruta(participant_dir)
-    IMAGES_DIR = BASE_DIR
+    imagenes_detectadas_dir, _, _ = resolver_carpeta_imagenes_participante(BASE_DIR)
+    IMAGES_DIR = imagenes_detectadas_dir
     INFORMES_DIR = SCRIPT_DIR / RESULTADOS_DIR_NAME / safe_simple_folder_name(nombre_sujeto_desde_carpeta(BASE_DIR))
     INFORMES_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -1354,22 +1440,32 @@ def safe_filename_text(texto):
 
 
 def build_output_paths(nombre_sujeto, fecha_informe, tipo_informe_clave):
+    """Rutas cortas y compatibles con Windows.
+
+    Estructura generada:
+    Resultados/
+      Participante/
+        Excel/
+        Word/
+        Graficos/
+    """
     INFORMES_DIR.mkdir(parents=True, exist_ok=True)
-    fecha_archivo = pd.to_datetime(fecha_informe, format="%d/%m/%Y").strftime("%Y_%m_%d")
     nombre_limpio = safe_filename_text(nombre_sujeto)
-    sufijo = "ENTRENADOR" if tipo_informe_clave == "entrenador" else "PARTICIPANTE"
-    base_name = f"{fecha_archivo}_{nombre_limpio}_informe_{sufijo}"
-    report_dir = INFORMES_DIR / base_name
-    graph_dir = report_dir / "graficos_kubios"
-    report_dir.mkdir(parents=True, exist_ok=True)
-    graph_dir.mkdir(parents=True, exist_ok=True)
-    output_docx = report_dir / f"{base_name}.docx"
 
-    excel_dir = INFORMES_DIR / "excel_acumulado"
+    subject_dir = INFORMES_DIR / nombre_limpio
+    word_dir = subject_dir / "Word"
+    excel_dir = subject_dir / "Excel"
+    graph_dir = subject_dir / "Graficos"
+
+    word_dir.mkdir(parents=True, exist_ok=True)
     excel_dir.mkdir(parents=True, exist_ok=True)
-    output_xlsx = excel_dir / f"{nombre_limpio}_kubios_acumulado.xlsx"
+    graph_dir.mkdir(parents=True, exist_ok=True)
 
-    return output_docx, output_xlsx, report_dir, graph_dir
+    sufijo = "ENT" if tipo_informe_clave == "entrenador" else "PAR"
+    output_docx = word_dir / f"{nombre_limpio}_{sufijo}.docx"
+    output_xlsx = excel_dir / f"{nombre_limpio}.xlsx"
+
+    return output_docx, output_xlsx, subject_dir, graph_dir
 
 
 def build_incremented_output_path(output_docx):
@@ -3903,14 +3999,12 @@ def ejecutar_informe(tipo_informe_clave, tipo_informe_label, default_name=None, 
     output_docx_base, output_xlsx, report_dir_base, graph_dir_base = build_output_paths(nombre_sujeto, fecha_informe, tipo_informe_clave)
 
     output_docx, save_mode = decidir_guardado_informe(output_docx_base, global_mode=global_save_mode)
-    if output_docx != output_docx_base:
-        report_dir = output_docx.parent
-        graph_dir = report_dir / "graficos_kubios"
-        report_dir.mkdir(parents=True, exist_ok=True)
-        graph_dir.mkdir(parents=True, exist_ok=True)
-    else:
-        report_dir = report_dir_base
-        graph_dir = graph_dir_base
+    # Aunque el Word se guarde como _v2, _v3, etc., mantenemos la estructura corta:
+    # Participante/Word, Participante/Excel y Participante/Graficos.
+    report_dir = report_dir_base
+    graph_dir = graph_dir_base
+    report_dir.mkdir(parents=True, exist_ok=True)
+    graph_dir.mkdir(parents=True, exist_ok=True)
 
     logo_path = resolve_logo_path()
     foto_participante_path = resolve_participant_photo_path()
@@ -3934,24 +4028,19 @@ def ejecutar_informe(tipo_informe_clave, tipo_informe_label, default_name=None, 
     else:
         print("Estado del Excel: no existe todavía, se creará uno nuevo en esta ejecución.")
 
-    files = get_image_files(images_dir, recursive=True)
-    if not files:
-        print(f"No se encontraron imágenes dentro de la carpeta del sujeto: {images_dir}")
-        print("Buscando automáticamente en carpetas alternativas...")
-        detected_dir, detected_files, checked_dirs = find_images_flexible(images_dir)
-        if detected_files:
-            images_dir = detected_dir
-            files = detected_files
-            print(f"Carpeta de imágenes detectada automáticamente: {images_dir}")
-        else:
-            print("No se encontraron imágenes compatibles en ninguna ubicación habitual.")
-            print("Ubicaciones revisadas:")
-            for cand in checked_dirs:
-                print(f" - {cand}")
-            print("Participante omitido porque no hay imágenes disponibles para procesar.")
-            return False
+    images_dir, files, checked_dirs = resolver_carpeta_imagenes_participante(BASE_DIR)
+    config["images_dir"] = images_dir
+    print(f"Carpeta final de imágenes del participante: {images_dir}")
 
-    print(f"Imágenes detectadas: {len(files)}")
+    if not files:
+        print(f"No se encontraron imágenes compatibles para el participante: {nombre_sujeto}")
+        print("Carpetas revisadas:")
+        for cand in checked_dirs:
+            print(f" - {cand}")
+        print("Participante omitido porque no hay imágenes disponibles para procesar.")
+        return False
+
+    print(f"Imágenes detectadas para {nombre_sujeto}: {len(files)}")
     files_en_rango, files_sin_fecha, files_fuera_rango = filtrar_imagenes_desde_fecha(files, fecha_desde)
     print(f"Imágenes desde {fecha_desde.strftime('%Y-%m-%d')}: {len(files_en_rango)}")
     if files_sin_fecha:
@@ -4117,7 +4206,7 @@ def ejecutar_informe(tipo_informe_clave, tipo_informe_label, default_name=None, 
         output_docx=saved_docx,
         output_xlsx=output_xlsx,
     )
-    participant_summary_xlsx = INFORMES_DIR / "excel_acumulado" / f"{safe_filename_text(nombre_sujeto)}_seguimiento_informes.xlsx"
+    participant_summary_xlsx = Path(output_xlsx).parent / f"{safe_filename_text(nombre_sujeto)}_seguimiento.xlsx"
     append_execution_summary_excel(summary_row, participant_summary_xlsx)
     global_summary_xlsx = get_global_summary_excel_path()
     append_execution_summary_excel(summary_row, global_summary_xlsx)
