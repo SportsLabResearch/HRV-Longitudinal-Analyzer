@@ -12,6 +12,11 @@ Novedades respecto a v20:
 
 import os
 import re
+import sys
+import ast
+import platform
+import shutil
+import subprocess
 import traceback
 import unicodedata
 from pathlib import Path
@@ -45,6 +50,27 @@ from config import (
     PROJECT_NEXT_OBJECTIVE,
 )
 
+# Módulo de participantes (v1.3.5)
+# Import robusto para ejecución desde Windows/macOS/Linux.
+try:
+    PROJECT_ROOT_FOR_IMPORT = Path(__file__).resolve().parent
+    if str(PROJECT_ROOT_FOR_IMPORT) not in sys.path:
+        sys.path.insert(0, str(PROJECT_ROOT_FOR_IMPORT))
+    from modules.participants import (
+        show_participants_manager,
+        participants_summary,
+        selected_paths_from_active_selection,
+        print_active_selection,
+        load_active_selection,
+    )
+    PARTICIPANTS_IMPORT_ERROR = None
+except Exception as exc:
+    show_participants_manager = None
+    participants_summary = None
+    selected_paths_from_active_selection = None
+    print_active_selection = None
+    load_active_selection = None
+    PARTICIPANTS_IMPORT_ERROR = str(exc)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR
@@ -205,6 +231,19 @@ def seleccionar_carpetas_participantes(root_dir):
     root_dir = _resolver_ruta(root_dir)
     directorio_participantes = resolver_directorio_participantes(root_dir)
     participantes = listar_carpetas_participantes(directorio_participantes)
+
+    # v1.3.3: si existe una selección activa creada desde el gestor de participantes,
+    # se puede reutilizar directamente para informes/análisis.
+    if selected_paths_from_active_selection is not None:
+        active_paths = selected_paths_from_active_selection(root_dir)
+        active_paths = [p for p in active_paths if p in participantes]
+        if active_paths:
+            print("\nSe ha detectado una selección activa de participantes:")
+            for idx, carpeta in enumerate(active_paths, start=1):
+                print(f"{idx:>3}. {nombre_sujeto_desde_carpeta(carpeta)}")
+            usar = input("\n¿Usar esta selección activa? [S/n]: ").strip().lower()
+            if usar in {"", "s", "si", "sí", "y", "yes"}:
+                return active_paths
 
     if not participantes:
         print("\nNo se han encontrado participantes.")
@@ -4230,11 +4269,34 @@ def ejecutar_informe(tipo_informe_clave, tipo_informe_label, default_name=None, 
     return True
 
 
+
+def mostrar_preanalisis_seleccion_activa():
+    """Muestra un resumen breve de la selección activa antes del análisis OCR."""
+    if load_active_selection is None:
+        return
+
+    payload = load_active_selection(SCRIPT_DIR)
+    participantes = payload.get("participants", []) if payload else []
+    if not participantes:
+        return
+
+    print("\n" + "-" * 60)
+    print(" SELECCIÓN ACTIVA DETECTADA")
+    print("-" * 60)
+    print(f"Participantes activos: {len(participantes)}")
+    for idx, item in enumerate(participantes, start=1):
+        nombre = item.get("name") or item.get("folder_name") or "Sin nombre"
+        imagenes = item.get("images", 0)
+        sesiones = item.get("sessions", 0)
+        print(f"{idx:>3}. {nombre} | imágenes: {imagenes} | sesiones: {sesiones}")
+    print("\nEl análisis podrá reutilizar esta selección si confirmas la opción al continuar.")
+
 def ejecutar_analisis():
     print("====================================")
     print("KUBIOS TODO-EN-UNO ESTABLE v41")
     print("====================================")
 
+    mostrar_preanalisis_seleccion_activa()
     carpetas_participantes = seleccionar_carpetas_participantes(SCRIPT_DIR)
     tipo_informe_clave, tipo_informe_label = pedir_tipo_informe()
 
@@ -4386,6 +4448,15 @@ def _status_text(path):
     return "OK" if path.exists() else "NO ENCONTRADO"
 
 
+def _print_project_notes(notes):
+    """Imprime notas del proyecto evitando que una tupla aparezca con paréntesis y comillas."""
+    if isinstance(notes, (list, tuple)):
+        for line in notes:
+            print(str(line).strip())
+    else:
+        print(str(notes).strip())
+
+
 def _count_subjects():
     datos_dir = SCRIPT_DIR / "Datos"
     if not datos_dir.exists() or not datos_dir.is_dir():
@@ -4414,6 +4485,136 @@ def _count_processed_records_from_excels():
     return total
 
 
+def _safe_count_dirs(root_dir):
+    root_dir = Path(root_dir)
+    if not root_dir.exists():
+        return 0
+    return sum(1 for p in root_dir.rglob("*") if p.is_dir() and "__pycache__" not in p.parts and ".git" not in p.parts)
+
+
+def _collect_python_project_stats(root_dir):
+    root_dir = Path(root_dir)
+    stats = {
+        "py_files": 0,
+        "lines": 0,
+        "functions": 0,
+        "classes": 0,
+        "modules": 0,
+        "folders": _safe_count_dirs(root_dir),
+    }
+    excluded = {".git", "__pycache__", ".venv", "venv", "env", "build", "dist"}
+
+    py_files = []
+    for py_file in root_dir.rglob("*.py"):
+        if any(part in excluded for part in py_file.parts):
+            continue
+        py_files.append(py_file)
+
+    stats["py_files"] = len(py_files)
+    stats["modules"] = sum(1 for p in py_files if p.name != "__init__.py")
+
+    for py_file in py_files:
+        try:
+            source = py_file.read_text(encoding="utf-8", errors="ignore")
+            stats["lines"] += sum(1 for line in source.splitlines() if line.strip())
+            tree = ast.parse(source)
+            stats["functions"] += sum(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) for node in ast.walk(tree))
+            stats["classes"] += sum(isinstance(node, ast.ClassDef) for node in ast.walk(tree))
+        except Exception:
+            continue
+
+    return stats
+
+
+def _count_sessions_in_data(datos_dir):
+    datos_dir = Path(datos_dir)
+    if not datos_dir.exists():
+        return 0
+    session_files = {".xlsx", ".xls", ".csv", ".txt", ".fit", ".tcx"}
+    return _count_files_by_suffix(datos_dir, session_files)
+
+
+def _requirements_summary():
+    """Resume el estado del archivo requirements.txt sin detener el programa."""
+    req = SCRIPT_DIR / "requirements.txt"
+    if not req.exists():
+        return "NO ENCONTRADO"
+
+    try:
+        lines = [
+            line.strip()
+            for line in req.read_text(encoding="utf-8", errors="ignore").splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ]
+    except Exception:
+        return "NO LEGIBLE"
+
+    return f"OK ({len(lines)} dependencias declaradas)"
+
+
+def _git_status_summary():
+    """Devuelve un estado simple de Git compatible con equipos sin Git instalado."""
+    if not (SCRIPT_DIR / ".git").exists():
+        return "NO INICIALIZADO"
+
+    if shutil.which("git") is None:
+        return "REPOSITORIO DETECTADO / GIT NO DISPONIBLE"
+
+    try:
+        result = subprocess.run(
+            ["git", "status", "--short"],
+            cwd=str(SCRIPT_DIR),
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if result.returncode != 0:
+            return "REPOSITORIO DETECTADO / ESTADO NO DISPONIBLE"
+        cambios = [line for line in result.stdout.splitlines() if line.strip()]
+        if not cambios:
+            return "OK / SIN CAMBIOS PENDIENTES"
+        return f"OK / {len(cambios)} CAMBIOS PENDIENTES"
+    except Exception:
+        return "REPOSITORIO DETECTADO / ESTADO NO DISPONIBLE"
+
+
+def _project_quality_status():
+    tests_dir = SCRIPT_DIR / "tests"
+    docs_dir = SCRIPT_DIR / "docs"
+    modules_dir = SCRIPT_DIR / "modules"
+    github_workflows = SCRIPT_DIR / ".github" / "workflows"
+    return {
+        "Git": (SCRIPT_DIR / ".git").exists(),
+        "README": (SCRIPT_DIR / "README.md").exists(),
+        "LICENSE": (SCRIPT_DIR / "LICENSE").exists() or (SCRIPT_DIR / "LICENSE.md").exists(),
+        "CHANGELOG": (SCRIPT_DIR / "CHANGELOG.md").exists(),
+        "Requirements": (SCRIPT_DIR / "requirements.txt").exists(),
+        "Documentación docs/": docs_dir.exists() and any(docs_dir.rglob("*")),
+        "Tests": tests_dir.exists() and any(tests_dir.rglob("test*.py")),
+        "Módulos Python": modules_dir.exists() and any(p.suffix == ".py" for p in modules_dir.rglob("*.py")),
+        "GitHub Actions": github_workflows.exists() and any(github_workflows.glob("*.yml")),
+        "Módulo dashboard": (SCRIPT_DIR / "modules" / "dashboard.py").exists() or True,
+    }
+
+
+def _ok_symbol(value):
+    return "OK" if value else "PENDIENTE"
+
+
+def _calculate_dynamic_progress():
+    values = []
+    for _, pct in PROJECT_PROGRESS.items():
+        try:
+            values.append(int(pct))
+        except Exception:
+            continue
+    if not values:
+        return PROJECT_OVERALL_PROGRESS
+
+    quality = _project_quality_status()
+    quality_score = int(sum(1 for v in quality.values() if v) / max(len(quality), 1) * 100)
+    return round((sum(values) / len(values) * 0.75) + (quality_score * 0.25))
+
 def mostrar_dashboard_proyecto():
     resultados_dir = SCRIPT_DIR / RESULTADOS_DIR_NAME
     datos_dir = SCRIPT_DIR / "Datos"
@@ -4423,28 +4624,53 @@ def mostrar_dashboard_proyecto():
     sujetos = _count_subjects()
     imagenes_entrada = _count_input_images()
     registros_excel = _count_processed_records_from_excels()
+    sesiones_detectadas = _count_sessions_in_data(datos_dir)
 
     excels_generados = _count_files_by_suffix(resultados_dir, {".xlsx", ".xls"})
     words_generados = _count_files_by_suffix(resultados_dir, {".docx"})
+    pdf_generados = _count_files_by_suffix(resultados_dir, {".pdf"})
     graficos_generados = _count_files_by_suffix(resultados_dir, {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tif", ".tiff"})
+
+    code_stats = _collect_python_project_stats(SCRIPT_DIR)
+    quality = _project_quality_status()
+    dynamic_progress = _calculate_dynamic_progress()
 
     print("\n" + "=" * 70)
     print(" DASHBOARD DEL PROYECTO")
     print("=" * 70)
 
     print(f"\nVersión actual: {PROJECT_VERSION}")
-    print(f"Progreso global estimado: {PROJECT_OVERALL_PROGRESS}%  {_progress_bar(PROJECT_OVERALL_PROGRESS, 25)}")
+    print(f"Progreso global calculado: {dynamic_progress}%  {_progress_bar(dynamic_progress, 25)}")
     print(f"Próximo objetivo: {PROJECT_NEXT_OBJECTIVE}")
+    print(f"Sistema operativo: {platform.system()} {platform.release()}")
+    print(f"Python: {sys.version.split()[0]}")
+    print(f"Directorio: {SCRIPT_DIR}")
 
     print("\n" + "-" * 70)
     print(" DATOS")
     print("-" * 70)
     print(f"Sujetos detectados:                 {sujetos}")
+    print(f"Sesiones/archivos de datos:         {sesiones_detectadas}")
     print(f"Imágenes de entrada detectadas:     {imagenes_entrada}")
     print(f"Registros en Excel acumulativo:     {registros_excel}")
+
+    print("\n" + "-" * 70)
+    print(" RESULTADOS")
+    print("-" * 70)
     print(f"Excels generados:                   {excels_generados}")
     print(f"Informes Word generados:            {words_generados}")
+    print(f"PDF generados:                      {pdf_generados}")
     print(f"Gráficos generados:                 {graficos_generados}")
+
+    print("\n" + "-" * 70)
+    print(" CÓDIGO")
+    print("-" * 70)
+    print(f"Archivos Python:                    {code_stats['py_files']}")
+    print(f"Módulos Python:                     {code_stats['modules']}")
+    print(f"Líneas de código útiles:            {code_stats['lines']}")
+    print(f"Funciones detectadas:               {code_stats['functions']}")
+    print(f"Clases detectadas:                  {code_stats['classes']}")
+    print(f"Carpetas del proyecto:              {code_stats['folders']}")
 
     print("\n" + "-" * 70)
     print(" CARPETAS Y ARCHIVOS CLAVE")
@@ -4453,9 +4679,26 @@ def mostrar_dashboard_proyecto():
     print(f"{RESULTADOS_DIR_NAME}/:                         {_status_text(resultados_dir)}")
     print(f"assets/:                             {_status_text(assets_dir)}")
     print(f"legacy/:                             {_status_text(legacy_dir)}")
+    print(f"modules/:                            {_status_text(SCRIPT_DIR / 'modules')}")
+    print(f"docs/:                               {_status_text(SCRIPT_DIR / 'docs')}")
+    print(f"tests/:                              {_status_text(SCRIPT_DIR / 'tests')}")
     print(f"main.py:                             {_status_text(SCRIPT_DIR / 'main.py')}")
     print(f"config.py:                           {_status_text(SCRIPT_DIR / 'config.py')}")
     print(f"legacy/V41_kubios.py:                {_status_text(legacy_dir / 'V41_kubios.py')}")
+
+    print("\n" + "-" * 70)
+    print(" CALIDAD DEL PROYECTO")
+    print("-" * 70)
+    for item, ok in quality.items():
+        print(f"{item:<38} {_ok_symbol(ok)}")
+
+    print("\n" + "-" * 70)
+    print(" ESTADO TÉCNICO")
+    print("-" * 70)
+    print(f"Git:                                  {_git_status_summary()}")
+    print(f"Dependencias:                         {_requirements_summary()}")
+    print(f"Ruta del proyecto:                    {SCRIPT_DIR}")
+    print(f"Ejecutable Python:                    {sys.executable}")
 
     print("\n" + "-" * 70)
     print(" DESARROLLO")
@@ -4464,9 +4707,8 @@ def mostrar_dashboard_proyecto():
         print(f"{area:<38} {porcentaje:>3}%  {_progress_bar(porcentaje)}")
 
     print("\nNota:")
-    print(PROJECT_PROGRESS_NOTES)
+    _print_project_notes(PROJECT_PROGRESS_NOTES)
     input("\nPulsa ENTER para volver al menú...")
-
 
 def mostrar_porcentaje_proyecto():
     print("\n" + "=" * 60)
@@ -4479,7 +4721,7 @@ def mostrar_porcentaje_proyecto():
         print(f"{area:<38} {porcentaje:>3}%  {_progress_bar(porcentaje)}")
 
     print("\nNota:")
-    print(PROJECT_PROGRESS_NOTES)
+    _print_project_notes(PROJECT_PROGRESS_NOTES)
     input("\nPulsa ENTER para volver al menú...")
 
 
@@ -4491,6 +4733,8 @@ def main():
         print("1. Ejecutar análisis Kubios OCR")
         print("2. Ver porcentaje del proyecto")
         print("3. Dashboard del proyecto")
+        print("4. Gestor de participantes")
+        print("5. Ver selección activa")
         print("0. Salir")
 
         opcion = input("\nSelecciona una opción: ").strip()
@@ -4505,6 +4749,25 @@ def main():
 
         if opcion == "3":
             mostrar_dashboard_proyecto()
+            continue
+
+        if opcion == "4":
+            if show_participants_manager is None:
+                print("El módulo de participantes no está disponible.")
+                if PARTICIPANTS_IMPORT_ERROR:
+                    print(f"Detalle técnico: {PARTICIPANTS_IMPORT_ERROR}")
+                print("\nComprueba que exista el archivo: modules/participants.py")
+                input("Pulsa ENTER para volver al menú...")
+            else:
+                show_participants_manager(SCRIPT_DIR / "Datos")
+            continue
+
+        if opcion == "5":
+            if print_active_selection is None:
+                print("El módulo de participantes no está disponible.")
+            else:
+                print_active_selection(SCRIPT_DIR)
+            input("\nPulsa ENTER para volver al menú...")
             continue
 
         if opcion == "0":

@@ -50,8 +50,8 @@ SESSION_GROUP_GAP_SECONDS = 90
 # IDENTIDAD Y ESTADO DEL PROYECTO
 # ======================================================
 
-PROJECT_VERSION = "v1.2.2"
-PROJECT_NEXT_OBJECTIVE = "v1.3.0 - Extraer módulo de participantes"
+PROJECT_VERSION = "v1.3.5"
+PROJECT_NEXT_OBJECTIVE = "v1.4.0 - Modularización progresiva estable"
 
 # ======================================================
 # ESTADO DEL PROYECTO
@@ -61,18 +61,16 @@ PROJECT_PROGRESS = {
     "Funcionalidad original V41 integrada": 100,
     "Git y estructura base": 100,
     "Configuración básica": 75,
-    "Gestión de participantes": 85,
+    "Gestión de participantes": 100,
     "Estructura de resultados": 80,
-    "Compatibilidad multiplataforma": 45,
-    "Modularización": 10,
-    "Documentación": 35,
+    "Compatibilidad multiplataforma": 55,
+    "Modularización": 30,
+    "Documentación": 55,
     "Pruebas": 0,
-    "Versión GitHub estable": 40,
+    "Versión GitHub estable": 65,
 }
 
-PROJECT_OVERALL_PROGRESS = 48
-PROJECT_PROGRESS_NOTES = (
-    "El software funcional original está integrado y operativo. ",
-    "El porcentaje global refleja el avance hacia una versión modular, ",
-    "multiplataforma, documentada y preparada para GitHub."
-)
+PROJECT_OVERALL_PROGRESS = 70
+PROJECT_PROGRESS_NOTES = """El software funcional original está integrado y operativo.
+El porcentaje global refleja el avance hacia una versión modular,
+multiplataforma, documentada y preparada para GitHub."""
