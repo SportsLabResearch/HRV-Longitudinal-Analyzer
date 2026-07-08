@@ -1,3 +1,29 @@
+## v1.4.2-a
+
+### Changed
+- Clarificada la función de las opciones 2, 3 y 7 del menú principal.
+- La opción 2 queda como Estado del desarrollo.
+- La opción 3 queda como Dashboard operativo, sin porcentajes de desarrollo.
+- La opción 7 queda como Auditoría del proyecto para revisión estable.
+- Progreso de la versión actualizado a 100% tras superar auditoría y tests básicos.
+
+# Changelog
+
+## v1.4.1-a - Auditoría interna del proyecto
+
+### Añadido
+- Nueva opción `7. Auditoría del proyecto` en el menú principal.
+- Nuevo módulo `modules/auditoria.py`.
+- Carpeta automática `Resultados_Auditoria/`.
+- Informe Word de auditoría.
+- Informe Excel de auditoría.
+- Resumen TXT de auditoría.
+
+### Mantenido
+- No se modifica el flujo de análisis Kubios OCR.
+- No se modifica la gestión de participantes.
+- No se modifica la validación científica SVF.
+
 # CHANGELOG
 
 ## v1.4.0-a - Scientific Validation Framework base
@@ -96,3 +122,13 @@ Fecha: 2026-07-08
 - Preparación para modularización.
 - Hoja de ruta de arquitectura.
 
+## v1.4.1-a - Auditoría + tests básicos
+
+### Añadido
+- Carpeta `tests/` con pruebas automáticas básicas reales.
+- Validación de estructura principal del proyecto.
+- Validación de compilación de archivos Python principales.
+- Validación básica del módulo de auditoría.
+
+### Objetivo
+- Elevar el proyecto desde auditoría avanzada hacia cierre estable, sin añadir nuevas funciones al análisis OCR.

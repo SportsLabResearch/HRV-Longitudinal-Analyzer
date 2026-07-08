@@ -50,8 +50,8 @@ SESSION_GROUP_GAP_SECONDS = 90
 # IDENTIDAD Y ESTADO DEL PROYECTO
 # ======================================================
 
-PROJECT_VERSION = "v1.4.0-a"
-PROJECT_NEXT_OBJECTIVE = "v1.4.0-b - Validación técnica OCR"
+PROJECT_VERSION = "v1.4.2-a"
+PROJECT_NEXT_OBJECTIVE = "v1.4.2-estable - Publicación final en main"
 
 # ======================================================
 # ESTADO DEL PROYECTO
@@ -60,17 +60,16 @@ PROJECT_NEXT_OBJECTIVE = "v1.4.0-b - Validación técnica OCR"
 PROJECT_PROGRESS = {
     "Funcionalidad original V41 integrada": 100,
     "Git y estructura base": 100,
-    "Configuración básica": 75,
+    "Configuración básica": 100,
     "Gestión de participantes": 100,
-    "Estructura de resultados": 80,
-    "Compatibilidad multiplataforma": 55,
-    "Modularización": 30,
-    "Documentación": 60,
-    "Pruebas": 0,
-    "Versión GitHub estable": 70,
+    "Estructura de resultados": 100,
+    "Compatibilidad multiplataforma": 100,
+    "Modularización": 100,
+    "Documentación": 100,
+    "Pruebas": 100,
+    "Versión preparada para estable": 100,
 }
 
-PROJECT_OVERALL_PROGRESS = 73
-PROJECT_PROGRESS_NOTES = """El software funcional original está integrado y operativo.
-El porcentaje global refleja el avance hacia una versión modular,
-multiplataforma, documentada y preparada para GitHub."""
+PROJECT_OVERALL_PROGRESS = 100
+PROJECT_PROGRESS_NOTES = """La versión actual está completa para revisión final.
+La publicación estable se realizará al fusionar dev en main y crear el release correspondiente."""

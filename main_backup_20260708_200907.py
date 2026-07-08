@@ -82,14 +82,6 @@ except Exception as exc:
     ensure_validation_structure = None
     VALIDATION_IMPORT_ERROR = str(exc)
 
-# Project Audit Module (v1.4.1-a)
-try:
-    from modules.auditoria import ejecutar_auditoria_proyecto
-    AUDITORIA_IMPORT_ERROR = None
-except Exception as exc:
-    ejecutar_auditoria_proyecto = None
-    AUDITORIA_IMPORT_ERROR = str(exc)
-
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR
 IMAGES_DIR = BASE_DIR
@@ -4654,10 +4646,12 @@ def mostrar_dashboard_proyecto():
     dynamic_progress = _calculate_dynamic_progress()
 
     print("\n" + "=" * 70)
-    print(" DASHBOARD")
+    print(" DASHBOARD DEL PROYECTO")
     print("=" * 70)
 
     print(f"\nVersión actual: {PROJECT_VERSION}")
+    print(f"Progreso global calculado: {dynamic_progress}%  {_progress_bar(dynamic_progress, 25)}")
+    print(f"Próximo objetivo: {PROJECT_NEXT_OBJECTIVE}")
     print(f"Sistema operativo: {platform.system()} {platform.release()}")
     print(f"Python: {sys.version.split()[0]}")
     print(f"Directorio: {SCRIPT_DIR}")
@@ -4716,11 +4710,19 @@ def mostrar_dashboard_proyecto():
     print(f"Ruta del proyecto:                    {SCRIPT_DIR}")
     print(f"Ejecutable Python:                    {sys.executable}")
 
+    print("\n" + "-" * 70)
+    print(" DESARROLLO")
+    print("-" * 70)
+    for area, porcentaje in PROJECT_PROGRESS.items():
+        print(f"{area:<38} {porcentaje:>3}%  {_progress_bar(porcentaje)}")
+
+    print("\nNota:")
+    _print_project_notes(PROJECT_PROGRESS_NOTES)
     input("\nPulsa ENTER para volver al menú...")
 
 def mostrar_porcentaje_proyecto():
     print("\n" + "=" * 60)
-    print(" ESTADO DEL DESARROLLO")
+    print(" ESTADO DEL PROYECTO")
     print("=" * 60)
     print(f"\nVersión actual: {PROJECT_VERSION}")
     print(f"Progreso global estimado: {PROJECT_OVERALL_PROGRESS}%  {_progress_bar(PROJECT_OVERALL_PROGRESS)}\n")
@@ -4739,12 +4741,11 @@ def main():
         print(" HRV-LONGITUDINAL-ANALYZER")
         print("=" * 60)
         print("1. Ejecutar análisis Kubios OCR")
-        print("2. Estado del desarrollo")
-        print("3. Dashboard")
+        print("2. Ver porcentaje del proyecto")
+        print("3. Dashboard del proyecto")
         print("4. Gestor de participantes")
         print("5. Ver selección activa")
         print("6. Validación científica (SVF)")
-        print("7. Auditoría del proyecto")
         print("0. Salir")
 
         opcion = input("\nSelecciona una opción: ").strip()
@@ -4790,17 +4791,6 @@ def main():
                 input("Pulsa ENTER para volver al menú...")
             else:
                 show_validation_menu(SCRIPT_DIR)
-            continue
-
-        if opcion == "7":
-            if ejecutar_auditoria_proyecto is None:
-                print("El módulo de auditoría no está disponible.")
-                if AUDITORIA_IMPORT_ERROR:
-                    print(f"Detalle técnico: {AUDITORIA_IMPORT_ERROR}")
-                print("\nComprueba que exista el archivo: modules/auditoria.py")
-                input("Pulsa ENTER para volver al menú...")
-            else:
-                ejecutar_auditoria_proyecto()
             continue
 
         if opcion == "0":
