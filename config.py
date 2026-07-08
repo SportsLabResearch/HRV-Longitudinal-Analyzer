@@ -50,8 +50,8 @@ SESSION_GROUP_GAP_SECONDS = 90
 # IDENTIDAD Y ESTADO DEL PROYECTO
 # ======================================================
 
-PROJECT_VERSION = "v1.3.5"
-PROJECT_NEXT_OBJECTIVE = "v1.4.0 - Modularización progresiva estable"
+PROJECT_VERSION = "v1.4.0-a"
+PROJECT_NEXT_OBJECTIVE = "v1.4.0-b - Validación técnica OCR"
 
 # ======================================================
 # ESTADO DEL PROYECTO
@@ -65,12 +65,12 @@ PROJECT_PROGRESS = {
     "Estructura de resultados": 80,
     "Compatibilidad multiplataforma": 55,
     "Modularización": 30,
-    "Documentación": 55,
+    "Documentación": 60,
     "Pruebas": 0,
-    "Versión GitHub estable": 65,
+    "Versión GitHub estable": 70,
 }
 
-PROJECT_OVERALL_PROGRESS = 70
+PROJECT_OVERALL_PROGRESS = 73
 PROJECT_PROGRESS_NOTES = """El software funcional original está integrado y operativo.
 El porcentaje global refleja el avance hacia una versión modular,
 multiplataforma, documentada y preparada para GitHub."""

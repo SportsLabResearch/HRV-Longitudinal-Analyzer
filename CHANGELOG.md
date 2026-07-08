@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## v1.4.0-a - Scientific Validation Framework base
+
+### Added
+- Nueva estructura `Validation/` para validación técnica y científica.
+- Nuevo módulo `modules/validation.py`.
+- Nuevo menú principal: `6. Validación científica (SVF)`.
+- Dashboard básico de validación científica.
+- Estado de reproducibilidad con sistema operativo, Python y commit Git.
+- Carpetas base para Technical, Scientific, Benchmark, Reproducibility, Datasets, Publications, Protocols y Results.
+
+### Changed
+- Versión del proyecto actualizada a `v1.4.0-a`.
+- Próximo objetivo actualizado a `v1.4.0-b - Validación técnica OCR`.
+
+
 ## v1.3.5 - Estable
 
 Fecha: 2026-07-08

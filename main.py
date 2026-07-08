@@ -72,6 +72,16 @@ except Exception as exc:
     load_active_selection = None
     PARTICIPANTS_IMPORT_ERROR = str(exc)
 
+# Scientific Validation Framework (v1.4.0-a)
+try:
+    from modules.validation import show_validation_menu, print_validation_dashboard, ensure_validation_structure
+    VALIDATION_IMPORT_ERROR = None
+except Exception as exc:
+    show_validation_menu = None
+    print_validation_dashboard = None
+    ensure_validation_structure = None
+    VALIDATION_IMPORT_ERROR = str(exc)
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 BASE_DIR = SCRIPT_DIR
 IMAGES_DIR = BASE_DIR
@@ -4735,6 +4745,7 @@ def main():
         print("3. Dashboard del proyecto")
         print("4. Gestor de participantes")
         print("5. Ver selección activa")
+        print("6. Validación científica (SVF)")
         print("0. Salir")
 
         opcion = input("\nSelecciona una opción: ").strip()
@@ -4768,6 +4779,18 @@ def main():
             else:
                 print_active_selection(SCRIPT_DIR)
             input("\nPulsa ENTER para volver al menú...")
+            continue
+
+
+        if opcion == "6":
+            if show_validation_menu is None:
+                print("El módulo de validación científica no está disponible.")
+                if VALIDATION_IMPORT_ERROR:
+                    print(f"Detalle técnico: {VALIDATION_IMPORT_ERROR}")
+                print("\nComprueba que exista el archivo: modules/validation.py")
+                input("Pulsa ENTER para volver al menú...")
+            else:
+                show_validation_menu(SCRIPT_DIR)
             continue
 
         if opcion == "0":
