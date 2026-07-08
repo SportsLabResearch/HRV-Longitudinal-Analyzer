@@ -54,3 +54,12 @@ data/raw/*
 # Proyecto HRV
 Resultados/
 Datos/
+
+*.zip
+Resultados_Auditoria/
+*_backup_*.py
+build/
+dist/
+Distribucion/
+*.exe
+*.spec
