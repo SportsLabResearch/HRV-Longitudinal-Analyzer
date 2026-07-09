@@ -132,3 +132,9 @@ Fecha: 2026-07-08
 
 ### Objetivo
 - Elevar el proyecto desde auditoría avanzada hacia cierre estable, sin añadir nuevas funciones al análisis OCR.
+
+## v1.4.7 - Zenodo integration
+
+- Zenodo-GitHub integration for automatic DOI generation.
+## v1.4.7 - Zenodo integration
+- Zenodo-GitHub integration for automatic DOI generation.
