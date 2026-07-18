@@ -24,15 +24,3 @@ Questions, research collaborations, validation studies, software proposals and i
 [:material-email: Send email](mailto:pepepinoortega@gmail.com){ .md-button .md-button--primary }
 
 [:material-github: GitHub organization](https://github.com/SportsLabResearch){ .md-button }
-
-## Research areas
-
-- Sport science
-- Exercise physiology
-- Health sciences
-- Heart-rate variability
-- Blood-pressure analysis
-- GNSS and wearable technologies
-- Artificial intelligence
-- Scientific software development
-- Reproducible and FAIR research

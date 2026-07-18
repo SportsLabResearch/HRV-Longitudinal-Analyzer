@@ -46,6 +46,6 @@ Open, reproducible and scientifically validated software developed by **SportsLa
 
     [:material-tag: Releases](https://github.com/SportsLabResearch/HRV-Longitudinal-Analyzer/releases){ .md-button }
 
-    **DOI pendiente de publicación en Zenodo.**
+    **DOI pending publication in Zenodo.**
 
 </div>
