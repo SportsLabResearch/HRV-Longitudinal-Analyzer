@@ -1,10 +1,9 @@
 # FAQ
 
-## ¿Dónde pongo las imágenes?
-En `datos/` o en subcarpetas como `imagenes_judith`.
+## Are personal data uploaded to GitHub?
 
-## ¿Puedo analizar todos los participantes?
-Sí. Selecciona `0` cuando el programa muestre la lista de participantes.
+No. Datos, generated reports and the virtual environment are excluded through .gitignore.
 
-## ¿Dónde se guardan los resultados?
-En la carpeta `resultados/`, organizados por participante.
+## Where are results saved?
+
+Inside Resultados_analisis_espacial.

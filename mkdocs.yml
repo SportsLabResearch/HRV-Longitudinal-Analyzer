@@ -1,0 +1,34 @@
+﻿site_name: HRV Longitudinal Analyzer
+site_description: Scientific software for longitudinal Heart Rate Variability (HRV) analysis developed by SportsLabResearch.
+site_url: https://sportslabresearch.github.io/HRV-Longitudinal-Analyzer/
+
+repo_name: SportsLabResearch/HRV-Longitudinal-Analyzer
+repo_url: https://github.com/SportsLabResearch/HRV-Longitudinal-Analyzer
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: green
+      accent: lime
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - tables
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Installation: installation.md
+  - Citation: citation.md
+  - Publications: publications.md
+  - Downloads: downloads.md
+  - FAQ: FAQ.md
+  - Changelog: changelog.md
