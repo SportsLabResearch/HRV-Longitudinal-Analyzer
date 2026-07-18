@@ -2,50 +2,59 @@
 
 ## SportsLabResearch
 
-Open, reproducible and scientifically validated research software for Sport Science, Health and Human Performance.
+Open-source scientific software ecosystem for sports science, exercise physiology, health sciences, wearable technologies, artificial intelligence and reproducible research.
 
 ---
 
-## Principal Investigator
+## Contact information
 
-**<NOMBRE Y APELLIDOS>**
-
-**Affiliation**  
-<UNIVERSIDAD / INSTITUCIÓN>
+**Location**  
+Spain
 
 **Email**  
-<correo@institucion.es>
+[pepepinoortega@gmail.com](mailto:pepepinoortega@gmail.com)
 
-[:material-github: GitHub](https://github.com/SportsLabResearch){ .md-button }
-
-[:material-card-account-details: ORCID](https://orcid.org/<ORCID>){ .md-button }
-
-[:material-school: Google Scholar](<GOOGLE_SCHOLAR_URL>){ .md-button }
-
-[:material-file-account: ResearchGate](<RESEARCHGATE_URL>){ .md-button }
+**Website**  
+[https://sportslabresearch.org](https://sportslabresearch.org)
 
 ---
 
-## Research Areas
+## Research profiles
 
-- Sports Science
-- Heart Rate Variability
-- Blood Pressure Analysis
-- GNSS & Wearable Technologies
-- Research Software
-- Open Science
-- FAIR Principles
+[:material-card-account-details: ORCID](https://orcid.org/0000-0002-9091-0897){ .md-button }
+
+[:material-identifier: ResearcherID](http://www.researcherid.com/rid/M-7581-2017){ .md-button }
+
+[:material-school: Scopus Author Profile](http://www.scopus.com/inward/authorDetails.url?authorID=57212882611&partnerID=MN8TOARS){ .md-button }
+
+[:material-account-search: SciProfiles](https://sciprofiles.com/profile/570378){ .md-button }
+
+[:material-github: GitHub Organization](https://github.com/SportsLabResearch){ .md-button }
 
 ---
 
-## Research Software
+## Research and collaboration areas
+
+- Sports science
+- Exercise physiology
+- Health sciences
+- Heart-rate variability
+- Blood-pressure analysis
+- GNSS and wearable technologies
+- Artificial intelligence
+- Biomechanics
+- Scientific software development
+- Reproducible and FAIR research
+
+---
+
+## Research software
 
 - HRV Longitudinal Analyzer
 - SportsLabResearch BloodPressure Analyzer
 - SportsLabResearch WIMU DataExtractor
-- SportsLabResearch Rugby 7 Referee Spatial Analysis
+- Rugby 7 Referee Spatial Analysis
 
 ---
 
-Questions, collaborations and scientific partnerships are welcome.
-
+Questions, scientific collaborations, software proposals and institutional partnerships are welcome.
