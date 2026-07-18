@@ -46,18 +46,6 @@ Open, reproducible and scientifically validated software developed by **SportsLa
 
     [:material-tag: Releases](https://github.com/SportsLabResearch/HRV-Longitudinal-Analyzer/releases){ .md-button }
 
-    [:material-database: DOI](https://doi.org/10.5281/zenodo.21273737){ .md-button }
+    **DOI pendiente de publicación en Zenodo.**
 
 </div>
-
-## Common Framework
-
-- Python
-- GitHub
-- GitHub Releases
-- GitHub Pages
-- MkDocs Material
-- Zenodo DOI
-- FAIR principles
-
-> One portfolio. One methodology. One identity.

@@ -1,47 +1,38 @@
 ﻿# Contact SportsLabResearch
 
-## Research Software and Scientific Collaboration
-
-SportsLabResearch develops open, reproducible and scientifically validated research software for sport science, health sciences and human performance.
-
 ## Contact information
 
-**Organization:** SportsLabResearch
+**SportsLabResearch**
 
-**GitHub organization:**  
-https://github.com/SportsLabResearch
+Open-source scientific software ecosystem for sports science, exercise physiology, health sciences, wearable technologies, artificial intelligence and reproducible research.
 
-**Research software portfolio:**  
-https://sportslabresearch.github.io/portfolio/
+| Information | Details |
+|---|---|
+| Location | Spain |
+| Email | [pepepinoortega@gmail.com](mailto:pepepinoortega@gmail.com) |
+| Website | [sportslabresearch.org](https://sportslabresearch.org) |
+| GitHub | [SportsLabResearch](https://github.com/SportsLabResearch) |
+| ORCID | [0000-0002-9091-0897](https://orcid.org/0000-0002-9091-0897) |
+| ResearcherID | [M-7581-2017](http://www.researcherid.com/rid/M-7581-2017) |
+| Scopus Author ID | [57212882611](http://www.scopus.com/inward/authorDetails.url?authorID=57212882611&partnerID=MN8TOARS) |
+| SciProfiles | [Profile 570378](https://sciprofiles.com/profile/570378) |
 
-**Documentation portal:**  
-https://sportslabresearch.github.io/
+## Scientific collaboration
 
-## Areas of research and collaboration
+Questions, research collaborations, validation studies, software proposals and institutional partnerships are welcome.
+
+[:material-email: Send email](mailto:pepepinoortega@gmail.com){ .md-button .md-button--primary }
+
+[:material-github: GitHub organization](https://github.com/SportsLabResearch){ .md-button }
+
+## Research areas
 
 - Sport science
 - Exercise physiology
+- Health sciences
 - Heart-rate variability
 - Blood-pressure analysis
 - GNSS and wearable technologies
-- Scientific data processing
-- Research software development
-- Reproducible research
-- FAIR principles
-
-## Available research software
-
-- HRV Longitudinal Analyzer
-- SportsLabResearch BloodPressure Analyzer
-- SportsLabResearch WIMU DataExtractor
-- Rugby 7 Referee Spatial Analysis
-
-## Collaboration
-
-Questions, scientific collaborations, validation studies, software proposals and institutional partnerships are welcome.
-
-## Main contact channel
-
-Contact SportsLabResearch through the official GitHub organization:
-
-[:material-github: SportsLabResearch on GitHub](https://github.com/SportsLabResearch){ .md-button .md-button--primary }
+- Artificial intelligence
+- Scientific software development
+- Reproducible and FAIR research
