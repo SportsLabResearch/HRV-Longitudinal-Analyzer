@@ -1,0 +1,29 @@
+﻿site_name: HRV-Longitudinal-Analyzer
+site_description: Scientific software for longitudinal heart rate variability analysis
+site_author: SportsLabResearch
+
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - User Manual: Manual_Usuario.md
+  - Installation: Instalacion.md
+  - Practical Examples: Casos_Practicos.md
+  - FAQ: FAQ.md
+  - Architecture: Arquitectura.md
+  - Technical Manual: Manual_Tecnico.md
+  - Roadmap: Roadmap.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+
+copyright: HRV-Longitudinal-Analyzer · Version 2.0.0 · 04 August 2026 · SportsLabResearch
