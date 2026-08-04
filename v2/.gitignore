@@ -1,0 +1,65 @@
+# ===========================
+# Python
+# ===========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Archivos temporales
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Excel temporales
+~$*.xlsx
+~$*.xls
+
+# Base de datos
+*.db
+
+# Python cache
+.pytest_cache/
+.mypy_cache/
+
+# Distribución
+build/
+dist/
+*.egg-info/
+
+# Datos procesados
+data/processed/*
+!data/processed/.gitkeep
+
+# Informes
+data/reports/*
+!data/reports/.gitkeep
+
+# Datos originales (opcional)
+# Si los datos contienen información sensible, conviene no subirlos.
+data/raw/*
+!data/raw/.gitkeep
+
+# Proyecto HRV
+Resultados/
+Datos/
+
+*.zip
+Resultados_Auditoria/
+*_backup_*.py
+build/
+dist/
+Distribucion/
+*.exe
+*.spec
