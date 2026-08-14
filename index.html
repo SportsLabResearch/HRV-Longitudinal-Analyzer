@@ -65,8 +65,25 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#hrv-longitudinal-analyzer-v210" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <div style="text-align:center; font-weight:600;">
+    HRV-Longitudinal-Analyzer · Version 2.0.0 · 04 August 2026 · SportsLabResearch
+  </div>
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -362,6 +379,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
         
@@ -379,6 +416,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#novedades-de-v210" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novedades de v2.1.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variables-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variables principales
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dos-entornos-de-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dos entornos de ejecución
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo general
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -590,6 +690,60 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#novedades-de-v210" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novedades de v2.1.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variables-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variables principales
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dos-entornos-de-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dos entornos de ejecución
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo general
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -606,9 +760,75 @@
 
 
 
-  <h1>Home</h1>
-
-<p>...contenido completo del README...</p>
+<h1 id="hrv-longitudinal-analyzer-v210">HRV-Longitudinal-Analyzer v2.1.0<a class="headerlink" href="#hrv-longitudinal-analyzer-v210" title="Permanent link">&para;</a></h1>
+<p>Aplicación científica en Python para extraer mediante OCR, organizar y analizar
+longitudinalmente resultados de variabilidad de la frecuencia cardiaca (VFC/HRV)
+procedentes de imágenes de Kubios HRV.</p>
+<h2 id="novedades-de-v210">Novedades de v2.1.0<a class="headerlink" href="#novedades-de-v210" title="Permanent link">&para;</a></h2>
+<ul>
+<li>cálculo automático de <strong>LnRMSSD</strong> a partir de RMSSD;</li>
+<li>selección de uno, varios o todos los participantes;</li>
+<li>intervalo de análisis con fecha inicial y fecha final opcional;</li>
+<li>codificación estable mediante <code>Sujeto_001</code>, <code>Sujeto_002</code>, etc.;</li>
+<li>informes por participante y seguimiento global;</li>
+<li>auditoría técnica y validación científica;</li>
+<li>preparación de distribuciones y ejecutables para Windows;</li>
+<li>separación estricta entre código, datos locales y resultados.</li>
+</ul>
+<h2 id="variables-principales">Variables principales<a class="headerlink" href="#variables-principales" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Dominio</th>
+<th>Variables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frecuencia cardiaca</td>
+<td>HR, RR medio</td>
+</tr>
+<tr>
+<td>Dominio temporal</td>
+<td>SDNN, RMSSD, LnRMSSD, pNN50, pNN20</td>
+</tr>
+<tr>
+<td>Poincaré</td>
+<td>SD1, SD2</td>
+</tr>
+<tr>
+<td>Dominio frecuencial</td>
+<td>VLF, LF, HF, LFnu, HFnu, LF/HF</td>
+</tr>
+<tr>
+<td>Complementarias</td>
+<td>Índice de estrés, frecuencia respiratoria, PVC</td>
+</tr>
+</tbody>
+</table>
+<p>Las variables disponibles dependen de que aparezcan de forma legible en la
+captura. El OCR no sustituye la revisión de calidad del dato original.</p>
+<h2 id="dos-entornos-de-ejecucion">Dos entornos de ejecución<a class="headerlink" href="#dos-entornos-de-ejecucion" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>main.py</code>: flujo local completo para datos privados autorizados.</li>
+<li><code>main_public.py</code>: flujo restringido que solo utiliza <code>Datos_publicos/</code> y
+  genera resultados en <code>Resultados_publicos/</code>.</li>
+</ul>
+<h2 id="flujo-general">Flujo general<a class="headerlink" href="#flujo-general" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Guardar las imágenes en las carpetas locales de participantes.</li>
+<li>Seleccionar participantes y fechas.</li>
+<li>Extraer las variables mediante OCR.</li>
+<li>Aplicar controles de calidad y calcular LnRMSSD.</li>
+<li>Generar Excel, Word, PDF y gráficos longitudinales.</li>
+<li>Revisar incidencias y conservar la trazabilidad.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Privacidad</p>
+<p>No deben publicarse imágenes, correspondencias entre nombres y códigos ni
+resultados sin la revisión ética, jurídica y documental correspondiente.</p>
+</div>
+<p><a href="https://github.com/SportsLabResearch/HRV-Longitudinal-Analyzer/releases/tag/v2.1.0">Descargar v2.1.0</a></p>
 
 
 
@@ -644,7 +864,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      HRV-Longitudinal-Analyzer · Version 2.0.0 · 04 August 2026 · SportsLabResearch
+      HRV-Longitudinal-Analyzer · Version 2.1.0 · 14 August 2026 · SportsLabResearch
     </div>
   
   

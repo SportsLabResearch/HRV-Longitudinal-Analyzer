@@ -68,12 +68,24 @@
     <div data-md-component="skip">
       
         
-        <a href="#installation" class="md-skip">
+        <a href="#instalacion" class="md-skip">
           Skip to content
         </a>
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <div style="text-align:center; font-weight:600;">
+    HRV-Longitudinal-Analyzer · Version 2.0.0 · 04 August 2026 · SportsLabResearch
+  </div>
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -477,10 +489,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#requisitos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        Requisitos
       
     </span>
   </a>
@@ -488,10 +500,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation_1" class="md-nav__link">
+  <a href="#instalacion-desde-codigo-fuente" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Instalación desde código fuente
       
     </span>
   </a>
@@ -499,10 +511,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-structure" class="md-nav__link">
+  <a href="#comprobacion-de-tesseract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Project structure
+        Comprobación de Tesseract
       
     </span>
   </a>
@@ -510,10 +522,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#preparing-the-data" class="md-nav__link">
+  <a href="#verificacion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Preparing the data
+        Verificación
       
     </span>
   </a>
@@ -521,32 +533,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#running-the-software" class="md-nav__link">
+  <a href="#carpetas-locales" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Running the software
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#generated-outputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Generated outputs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#updating-the-software" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Updating the software
+        Carpetas locales
       
     </span>
   </a>
@@ -723,10 +713,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#requisitos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        Requisitos
       
     </span>
   </a>
@@ -734,10 +724,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation_1" class="md-nav__link">
+  <a href="#instalacion-desde-codigo-fuente" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        Instalación desde código fuente
       
     </span>
   </a>
@@ -745,10 +735,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#project-structure" class="md-nav__link">
+  <a href="#comprobacion-de-tesseract" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Project structure
+        Comprobación de Tesseract
       
     </span>
   </a>
@@ -756,10 +746,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#preparing-the-data" class="md-nav__link">
+  <a href="#verificacion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Preparing the data
+        Verificación
       
     </span>
   </a>
@@ -767,32 +757,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#running-the-software" class="md-nav__link">
+  <a href="#carpetas-locales" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Running the software
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#generated-outputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Generated outputs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#updating-the-software" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Updating the software
+        Carpetas locales
       
     </span>
   </a>
@@ -816,57 +784,35 @@
 
 
 
-<h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
-<p>HRV-Longitudinal-Analyzer requires:</p>
+<h1 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h1>
+<h2 id="requisitos">Requisitos<a class="headerlink" href="#requisitos" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Python 3.11 or later</li>
-<li>Windows operating system</li>
-<li>Kubios HRV reports exported in the supported format</li>
+<li>Windows 10/11, macOS o Linux.</li>
+<li>Python 3.10 o posterior.</li>
+<li>Tesseract OCR instalado y accesible desde el sistema.</li>
+<li>Git, únicamente para trabajar con el repositorio.</li>
 </ul>
-<hr />
-<h2 id="installation_1">Installation<a class="headerlink" href="#installation_1" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Download the project.</li>
-<li>Extract the compressed file.</li>
-<li>Install the required Python packages:</li>
-</ol>
-<pre><code class="language-text">pip install -r requirements.txt
+<h2 id="instalacion-desde-codigo-fuente">Instalación desde código fuente<a class="headerlink" href="#instalacion-desde-codigo-fuente" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">git clone https://github.com/SportsLabResearch/HRV-Longitudinal-Analyzer.git
+cd HRV-Longitudinal-Analyzer
+git switch dev
+python -m pip install -r requirements.txt
+python main.py
 </code></pre>
-<hr />
-<h2 id="project-structure">Project structure<a class="headerlink" href="#project-structure" title="Permanent link">&para;</a></h2>
-<p>The project folder should contain:</p>
-<pre><code class="language-text">main_public.py
-config.py
-requirements.txt
-Datos_publicos/
-Resultados_publicos/
-docs/
+<p>En Windows también pueden utilizarse <code>INICIAR_HRV_WINDOWS.bat</code> o
+<code>INICIAR_HRV_WINDOWS.ps1</code>. <code>launcher_hrv.py</code> comprueba las dependencias Python y
+avisa si Tesseract no está disponible.</p>
+<h2 id="comprobacion-de-tesseract">Comprobación de Tesseract<a class="headerlink" href="#comprobacion-de-tesseract" title="Permanent link">&para;</a></h2>
+<pre><code class="language-powershell">tesseract --version
 </code></pre>
-<hr />
-<h2 id="preparing-the-data">Preparing the data<a class="headerlink" href="#preparing-the-data" title="Permanent link">&para;</a></h2>
-<p>Copy the exported Kubios HRV reports into:</p>
-<pre><code class="language-text">Datos_publicos
+<h2 id="verificacion">Verificación<a class="headerlink" href="#verificacion" title="Permanent link">&para;</a></h2>
+<pre><code class="language-powershell">python -m compileall -q .
+python -m pytest -q
 </code></pre>
-<p>No additional configuration is required.</p>
-<hr />
-<h2 id="running-the-software">Running the software<a class="headerlink" href="#running-the-software" title="Permanent link">&para;</a></h2>
-<p>Execute:</p>
-<pre><code class="language-text">python main_public.py
-</code></pre>
-<p>or simply run:</p>
-<pre><code class="language-text">main_public.py
-</code></pre>
-<p>depending on your Python installation.</p>
-<hr />
-<h2 id="generated-outputs">Generated outputs<a class="headerlink" href="#generated-outputs" title="Permanent link">&para;</a></h2>
-<p>All generated files are automatically stored inside:</p>
-<pre><code class="language-text">Resultados_publicos
-</code></pre>
-<p>The original HRV reports are never modified.</p>
-<hr />
-<h2 id="updating-the-software">Updating the software<a class="headerlink" href="#updating-the-software" title="Permanent link">&para;</a></h2>
-<p>Replace the project files with the latest release while preserving your input and output folders if required.</p>
+<p>La versión <code>v2.1.0</code> fue validada con nueve pruebas automatizadas superadas.</p>
+<h2 id="carpetas-locales">Carpetas locales<a class="headerlink" href="#carpetas-locales" title="Permanent link">&para;</a></h2>
+<p><code>Datos/</code>, <code>.private/</code>, <code>Datos_publicos/</code>, <code>Resultados/</code> y
+<code>Resultados_publicos/</code> permanecen fuera de los paquetes públicos.</p>
 
 
 
@@ -902,7 +848,7 @@ docs/
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      HRV-Longitudinal-Analyzer · Version 2.0.0 · 04 August 2026 · SportsLabResearch
+      HRV-Longitudinal-Analyzer · Version 2.1.0 · 14 August 2026 · SportsLabResearch
     </div>
   
   

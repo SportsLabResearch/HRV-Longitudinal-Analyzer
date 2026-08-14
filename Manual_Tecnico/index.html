@@ -68,12 +68,24 @@
     <div data-md-component="skip">
       
         
-        <a href="#technical-manual" class="md-skip">
+        <a href="#manual-tecnico" class="md-skip">
           Skip to content
         </a>
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  <div style="text-align:center; font-weight:600;">
+    HRV-Longitudinal-Analyzer · Version 2.0.0 · 04 August 2026 · SportsLabResearch
+  </div>
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -585,10 +597,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#componentes-principales" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overview
+        Componentes principales
       
     </span>
   </a>
@@ -596,10 +608,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#input-data" class="md-nav__link">
+  <a href="#calidad-del-ocr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Input data
+        Calidad del OCR
       
     </span>
   </a>
@@ -607,10 +619,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#processing-pipeline" class="md-nav__link">
+  <a href="#calculo-de-lnrmssd" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Processing pipeline
+        Cálculo de LnRMSSD
       
     </span>
   </a>
@@ -618,10 +630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#participant-anonymization" class="md-nav__link">
+  <a href="#pruebas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Participant anonymization
+        Pruebas
       
     </span>
   </a>
@@ -629,21 +641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#outputs" class="md-nav__link">
+  <a href="#distribucion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Outputs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#software-philosophy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Software philosophy
+        Distribución
       
     </span>
   </a>
@@ -712,10 +713,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#componentes-principales" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overview
+        Componentes principales
       
     </span>
   </a>
@@ -723,10 +724,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#input-data" class="md-nav__link">
+  <a href="#calidad-del-ocr" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Input data
+        Calidad del OCR
       
     </span>
   </a>
@@ -734,10 +735,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#processing-pipeline" class="md-nav__link">
+  <a href="#calculo-de-lnrmssd" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Processing pipeline
+        Cálculo de LnRMSSD
       
     </span>
   </a>
@@ -745,10 +746,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#participant-anonymization" class="md-nav__link">
+  <a href="#pruebas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Participant anonymization
+        Pruebas
       
     </span>
   </a>
@@ -756,21 +757,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#outputs" class="md-nav__link">
+  <a href="#distribucion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Outputs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#software-philosophy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Software philosophy
+        Distribución
       
     </span>
   </a>
@@ -794,53 +784,35 @@
 
 
 
-<h1 id="technical-manual">Technical Manual<a class="headerlink" href="#technical-manual" title="Permanent link">&para;</a></h1>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>HRV-Longitudinal-Analyzer has been developed to automate the organization and processing of longitudinal heart rate variability (HRV) datasets exported from Kubios HRV Software.</p>
-<p>The public version performs all processing automatically while preserving participant confidentiality.</p>
-<hr />
-<h2 id="input-data">Input data<a class="headerlink" href="#input-data" title="Permanent link">&para;</a></h2>
-<p>The software reads all compatible HRV reports located inside:</p>
-<pre><code class="language-text">Datos_publicos
-</code></pre>
-<p>No manual configuration of the files is required.</p>
-<hr />
-<h2 id="processing-pipeline">Processing pipeline<a class="headerlink" href="#processing-pipeline" title="Permanent link">&para;</a></h2>
-<p>During execution the software automatically performs the following operations:</p>
-<ol>
-<li>File detection.</li>
-<li>Data import.</li>
-<li>Participant identification.</li>
-<li>Longitudinal organization of repeated measurements.</li>
-<li>Automatic participant anonymization.</li>
-<li>Data validation.</li>
-<li>Output generation.</li>
-</ol>
-<hr />
-<h2 id="participant-anonymization">Participant anonymization<a class="headerlink" href="#participant-anonymization" title="Permanent link">&para;</a></h2>
-<p>Each detected participant is assigned a unique anonymous identifier.</p>
-<p>Example:</p>
-<pre><code class="language-text">Subject_001
-Subject_002
-Subject_003
-</code></pre>
-<p>The original participant names are never included in the generated outputs.</p>
-<hr />
-<h2 id="outputs">Outputs<a class="headerlink" href="#outputs" title="Permanent link">&para;</a></h2>
-<p>All generated files are stored inside:</p>
-<pre><code class="language-text">Resultados_publicos
-</code></pre>
-<p>The original HRV reports remain unchanged.</p>
-<hr />
-<h2 id="software-philosophy">Software philosophy<a class="headerlink" href="#software-philosophy" title="Permanent link">&para;</a></h2>
-<p>The public version has been designed to provide:</p>
+<h1 id="manual-tecnico">Manual técnico<a class="headerlink" href="#manual-tecnico" title="Permanent link">&para;</a></h1>
+<h2 id="componentes-principales">Componentes principales<a class="headerlink" href="#componentes-principales" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Standardized processing.</li>
-<li>Automatic anonymization.</li>
-<li>Reproducible analyses.</li>
-<li>Scientific transparency.</li>
-<li>Easy distribution for research and teaching.</li>
+<li><code>main.py</code>: OCR, selección temporal, cálculo, resultados y menú.</li>
+<li><code>config.py</code>: rutas, extensiones, patrones de fecha y versión.</li>
+<li><code>modules/participants.py</code>: selección y gestión de participantes.</li>
+<li><code>modules/public_data.py</code>: códigos estables y sincronización controlada.</li>
+<li><code>modules/validation.py</code>: marco de validación científica.</li>
+<li><code>modules/auditoria.py</code>: evaluación técnica y evidencias.</li>
+<li><code>modules/distribution.py</code>: creación de paquetes depurados.</li>
 </ul>
+<h2 id="calidad-del-ocr">Calidad del OCR<a class="headerlink" href="#calidad-del-ocr" title="Permanent link">&para;</a></h2>
+<p>La extracción debe verificarse frente al valor visible. Para una validación
+formal se recomienda comparar el OCR con dos observadores expertos, realizar una
+segunda lectura intraobservador y analizar acuerdo, error, sesgo y fiabilidad.</p>
+<h2 id="calculo-de-lnrmssd">Cálculo de LnRMSSD<a class="headerlink" href="#calculo-de-lnrmssd" title="Permanent link">&para;</a></h2>
+<p>Para valores de RMSSD estrictamente positivos:</p>
+<p>$$
+\operatorname{LnRMSSD}=\ln(\operatorname{RMSSD})
+$$</p>
+<p>Los valores ausentes, no numéricos o no positivos no deben transformarse.</p>
+<h2 id="pruebas">Pruebas<a class="headerlink" href="#pruebas" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">python -m pytest -q
+</code></pre>
+<p>Se comprueban compilación, estructura, auditoría, informes, estabilidad de
+códigos y copia controlada de imágenes.</p>
+<h2 id="distribucion">Distribución<a class="headerlink" href="#distribucion" title="Permanent link">&para;</a></h2>
+<p>Se excluyen <code>Datos/</code>, <code>Datos_publicos/</code>, <code>.private/</code>, resultados, cachés,
+ejecutables previos y ZIP anteriores.</p>
 
 
 
@@ -876,7 +848,7 @@ Subject_003
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      HRV-Longitudinal-Analyzer · Version 2.0.0 · 04 August 2026 · SportsLabResearch
+      HRV-Longitudinal-Analyzer · Version 2.1.0 · 14 August 2026 · SportsLabResearch
     </div>
   
   
