@@ -1,29 +1,28 @@
-﻿{
+{
   "title": "HRV-Longitudinal-Analyzer: Longitudinal Heart Rate Variability Analysis",
-  "description": "<p><strong>HRV-Longitudinal-Analyzer</strong> is an open scientific software application for organizing, processing and analysing longitudinal heart rate variability (HRV) data obtained from repeated measurements.</p><p>Version 2.0.0 provides a public workflow that imports HRV reports exported from Kubios HRV Software, detects participants, organizes repeated measurements, automatically replaces participant identifiers with anonymous labels, and generates standardized scientific outputs.</p><p>The software is intended for longitudinal physiological monitoring, exercise science, sports science, clinical research, health monitoring, teaching and reproducible Open Science workflows.</p><p>Documentation: https://sportslabresearch.github.io/HRV-Longitudinal-Analyzer/</p><p>Source code: https://github.com/SportsLabResearch/HRV-Longitudinal-Analyzer/tree/dev/v2</p>",
+  "description": "Open scientific software for OCR-assisted organization, quality control, validation and longitudinal analysis of repeated HRV measurements.",
   "creators": [
     {
       "name": "Pino-Ortega, José",
       "affiliation": "University of Murcia"
     }
   ],
-  "version": "2.0.0",
-  "publication_date": "2026-08-04",
+  "version": "2.1.0",
+  "publication_date": "2026-08-14",
   "upload_type": "software",
   "access_right": "open",
   "language": "eng",
+  "license": "mit-license",
   "keywords": [
     "heart rate variability",
     "HRV",
     "longitudinal analysis",
-    "autonomic monitoring",
+    "OCR",
     "exercise science",
     "sports science",
     "clinical research",
     "Kubios",
-    "data anonymization",
     "reproducible research",
-    "Open Science",
     "Python"
   ],
   "related_identifiers": [
