@@ -1,0 +1,8 @@
+VALIDACIÓN REALIZADA
+===================
+- Gráfica HR generada con 46 valores válidos.
+- HR se recupera desde RR medio cuando falta el valor directo (HR = 60000/RR_MEAN).
+- Gráfica insertada como imagen inline centrada en Word.
+- PDF generado automáticamente desde el Word.
+- Validación visual realizada mediante renderizado del PDF.
+- main.py y main_public.py utilizan el mismo motor corregido.

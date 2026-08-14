@@ -1,76 +1,10 @@
-﻿# Frequently Asked Questions (FAQ)
+# FAQ
 
-## Which HRV software is supported?
+## ¿Dónde pongo las imágenes?
+En `datos/` o en subcarpetas como `imagenes_judith`.
 
-The current version processes reports exported from Kubios HRV Software.
+## ¿Puedo analizar todos los participantes?
+Sí. Selecciona `0` cuando el programa muestre la lista de participantes.
 
----
-
-## Does the software modify the original files?
-
-No.
-
-The original HRV reports are never modified.
-
----
-
-## Where should the HRV reports be placed?
-
-Copy all exported reports into:
-
-```text
-Datos_publicos
-```
-
-before running the software.
-
----
-
-## Where are the results stored?
-
-All generated outputs are automatically saved in:
-
-```text
-Resultados_publicos
-```
-
----
-
-## Is participant anonymization automatic?
-
-Yes.
-
-Every detected participant is automatically assigned an anonymous identifier (Subject_001, Subject_002, ...).
-
----
-
-## Can the software analyse multiple participants?
-
-Yes.
-
-The software automatically detects and processes one or many participants without requiring additional configuration.
-
----
-
-## Can longitudinal measurements be analysed?
-
-Yes.
-
-The software is specifically designed for repeated HRV assessments collected over time.
-
----
-
-## Are the generated outputs suitable for scientific research?
-
-Yes.
-
-The public version has been designed to generate standardized and anonymized outputs that facilitate reproducibility and scientific collaboration.
-
----
-
-## Is any personal information included in the public version?
-
-No.
-
-The repository and the generated outputs are intended for public distribution and do not contain participant-identifiable information.
-
+## ¿Dónde se guardan los resultados?
+En la carpeta `resultados/`, organizados por participante.

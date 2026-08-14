@@ -50,8 +50,8 @@ SESSION_GROUP_GAP_SECONDS = 90
 # IDENTIDAD Y ESTADO DEL PROYECTO
 # ======================================================
 
-PROJECT_VERSION = "v1.5.0-a"
-PROJECT_NEXT_OBJECTIVE = "v1.5.0-a - Preparación automática de distribución oficial"
+PROJECT_VERSION = "v2.1.0"
+PROJECT_NEXT_OBJECTIVE = "v2.1.0 - Arquitectura modular, auditoría y distribución segura"
 
 # ======================================================
 # ESTADO DEL PROYECTO
@@ -71,5 +71,5 @@ PROJECT_PROGRESS = {
 }
 
 PROJECT_OVERALL_PROGRESS = 100
-PROJECT_PROGRESS_NOTES = """La versión v1.5.0-a incorpora preparación automática de distribución.
-El objetivo es reducir pasos manuales para crear carpetas, ZIP de fuente y ZIP Windows."""
+PROJECT_PROGRESS_NOTES = """La versión v2.1.0 consolida la arquitectura modular,
+la auditoría, la validación científica y la preparación segura de distribuciones."""

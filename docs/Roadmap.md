@@ -1,40 +1,19 @@
-﻿# Roadmap
+# Roadmap
 
-## Current version
+## v1.2.x
+- Corrección de lectura de imágenes.
+- Selección flexible de participantes.
+- Rutas cortas de resultados.
 
-The current public version provides:
+## v1.3.x
+- Dashboard profesional.
+- Mejoras en informes.
+- Validación del flujo completo.
 
-- Automatic import of Kubios HRV reports.
-- Longitudinal organization of repeated measurements.
-- Automatic participant anonymization.
-- Standardized scientific outputs.
-- Public distribution compatible with Open Science principles.
+## v1.4.x
+- Importador universal.
+- Datos demo.
+- Manuales ampliados.
 
----
-
-## Future developments
-
-The following improvements are planned for future releases:
-
-- Support for additional HRV data sources.
-- Expanded statistical analyses.
-- Additional longitudinal indicators.
-- Improved automatic reporting.
-- Enhanced graphical outputs.
-- New export formats.
-- Performance optimizations.
-
----
-
-## Project vision
-
-HRV-Longitudinal-Analyzer aims to become an open scientific platform for the standardized processing and longitudinal analysis of heart rate variability data.
-
-The project will continue to prioritize:
-
-- Scientific reproducibility.
-- Data confidentiality.
-- Ease of use.
-- Open Science.
-- Long-term sustainability.
-
+## v2.0
+- Versión instalable para usuarios no técnicos.

@@ -1,0 +1,73 @@
+# ===========================
+# Python
+# ===========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Archivos temporales
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Excel temporales
+~$*.xlsx
+~$*.xls
+
+# Base de datos
+*.db
+
+# Python cache
+.pytest_cache/
+.mypy_cache/
+
+# Distribución
+build/
+dist/
+*.egg-info/
+
+# Datos procesados
+data/processed/*
+!data/processed/.gitkeep
+
+# Informes
+data/reports/*
+!data/reports/.gitkeep
+
+# Datos originales (opcional)
+# Si los datos contienen información sensible, conviene no subirlos.
+data/raw/*
+!data/raw/.gitkeep
+
+# Proyecto HRV
+Resultados/
+Resultados_Auditoria/
+Datos/
+.private/
+participant_codes.json
+# Las imágenes se generan localmente. Solo se conserva la estructura vacía.
+Datos_publicos/*
+!Datos_publicos/.gitkeep
+Distribucion_Release/
+Distribucion/
+.build_env_hrv/
+*.exe
+*.spec
+*.zip
+
+# Datos y resultados públicos generados localmente
+Resultados_publicos/
+site/
+__pycache__/

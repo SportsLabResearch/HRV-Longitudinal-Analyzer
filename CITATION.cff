@@ -1,4 +1,4 @@
-﻿cff-version: 1.2.0
+cff-version: 1.2.0
 title: "HRV-Longitudinal-Analyzer"
 message: "If you use this software, please cite it using the metadata below."
 type: software
@@ -8,24 +8,23 @@ authors:
     given-names: "José"
     affiliation: "University of Murcia"
 
-version: "2.0.0"
-date-released: "2026-08-04"
+version: "2.1.0"
+date-released: "2026-08-14"
 
 abstract: >
   Open scientific software for organizing, processing and analysing
-  longitudinal heart rate variability (HRV) data obtained from repeated
-  measurements. The software automatically imports Kubios HRV reports,
-  anonymizes participants, organizes repeated measurements and generates
-  standardized scientific outputs for reproducible research.
+  longitudinal heart rate variability data obtained from repeated
+  measurements, including OCR-assisted extraction, quality control,
+  longitudinal reporting and scientific validation workflows.
 
 license: "MIT"
-
 repository-code: "https://github.com/SportsLabResearch/HRV-Longitudinal-Analyzer"
 url: "https://sportslabresearch.github.io/HRV-Longitudinal-Analyzer/"
 keywords:
   - HRV
   - Heart Rate Variability
   - Longitudinal Analysis
+  - OCR
   - Exercise Science
   - Sports Science
   - Clinical Research
